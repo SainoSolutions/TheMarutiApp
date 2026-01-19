@@ -1,98 +1,132 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      
+      {/* Header */}
+      <Animated.View entering={FadeInDown.duration(600)} style={styles.header}>
+        <Text style={styles.greeting}>Hi Daniel 👋</Text>
+        <Text style={styles.location}>Premium Car Care at Your Doorstep</Text>
+      </Animated.View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {/* Hero Banner */}
+      <Animated.Image
+        entering={FadeInRight.duration(700)}
+        source={{ uri: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2' }}
+        style={styles.banner}
+      />
+
+      {/* Services */}
+      <Text style={styles.sectionTitle}>Popular Services</Text>
+
+      <View style={styles.grid}>
+        {services.map((item, index) => (
+          <Animated.View
+            key={index}
+            entering={FadeInDown.delay(index * 120).springify()}
+          >
+            <TouchableOpacity style={styles.card}>
+              <Image source={{ uri: item.icon }} style={styles.icon} />
+              <Text style={styles.cardText}>{item.title}</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
+      </View>
+
+      {/* Offer Card */}
+      <Animated.View entering={FadeInDown.delay(700)} style={styles.offerCard}>
+        <Text style={styles.offerTitle}>🚗 Flat 25% OFF on First Service</Text>
+        <Text style={styles.offerSub}>Trusted mechanics • Genuine parts • Free pickup & drop</Text>
+      </Animated.View>
+
+    </ScrollView>
   );
 }
 
+const services = [
+  { title: 'Car Wash', icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965567.png' },
+  { title: 'Periodic Service', icon: 'https://cdn-icons-png.flaticon.com/512/854/854878.png' },
+  { title: 'Battery', icon: 'https://cdn-icons-png.flaticon.com/512/3050/3050525.png' },
+  { title: 'AC Repair', icon: 'https://cdn-icons-png.flaticon.com/512/2933/2933825.png' },
+  { title: 'Tyres', icon: 'https://cdn-icons-png.flaticon.com/512/3126/3126590.png' },
+  { title: 'Denting', icon: 'https://cdn-icons-png.flaticon.com/512/809/809957.png' },
+];
+
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+  },
+  header: {
+    marginBottom: 10,
+  },
+  greeting: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#020617',
+  },
+  location: {
+    color: '#64748b',
+    marginTop: 4,
+  },
+  banner: {
+    width: width - 32,
+    height: 180,
+    borderRadius: 16,
+    marginVertical: 14,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginVertical: 10,
+  },
+  grid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  card: {
+    width: (width - 48) / 3,
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    padding: 14,
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 4,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  icon: {
+    width: 36,
+    height: 36,
+    marginBottom: 6,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  cardText: {
+    fontSize: 12,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  offerCard: {
+    backgroundColor: '#020617',
+    borderRadius: 16,
+    padding: 18,
+    marginVertical: 20,
+  },
+  offerTitle: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  offerSub: {
+    color: '#cbd5e1',
+    marginTop: 6,
+    fontSize: 13,
   },
 });
