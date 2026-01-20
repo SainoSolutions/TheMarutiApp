@@ -1,9 +1,15 @@
-import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
+import { darkTheme, lightTheme } from '../../theme/color';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const scheme = useColorScheme();
+  const colors = scheme === 'dark' ? darkTheme : lightTheme;
+
+  const styles = createStyles(colors);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       
@@ -56,77 +62,80 @@ const services = [
   { title: 'Denting', icon: 'https://cdn-icons-png.flaticon.com/512/809/809957.png' },
 ];
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-    paddingHorizontal: 16,
-    paddingTop: 10,
-  },
-  header: {
-    marginBottom: 10,
-  },
-  greeting: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#020617',
-  },
-  location: {
-    color: '#64748b',
-    marginTop: 4,
-  },
-  banner: {
-    width: width - 32,
-    height: 180,
-    borderRadius: 16,
-    marginVertical: 14,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginVertical: 10,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  card: {
-    width: (width - 48) / 3,
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    padding: 14,
-    alignItems: 'center',
-    marginBottom: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 4,
-  },
-  icon: {
-    width: 36,
-    height: 36,
-    marginBottom: 6,
-  },
-  cardText: {
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  offerCard: {
-    backgroundColor: '#020617',
-    borderRadius: 16,
-    padding: 18,
-    marginVertical: 20,
-  },
-  offerTitle: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  offerSub: {
-    color: '#cbd5e1',
-    marginTop: 6,
-    fontSize: 13,
-  },
-});
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 16,
+      paddingTop: 10,
+    },
+    header: {
+      marginBottom: 10,
+    },
+    greeting: {
+      fontSize: 24,
+      fontWeight: '700',
+      color: colors.textPrimary,
+    },
+    location: {
+      color: colors.textSecondary,
+      marginTop: 4,
+    },
+    banner: {
+      width: width - 32,
+      height: 180,
+      borderRadius: 16,
+      marginVertical: 14,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      marginVertical: 10,
+      color: colors.textPrimary,
+    },
+    grid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    },
+    card: {
+      width: (width - 48) / 3,
+      backgroundColor: colors.card,
+      borderRadius: 14,
+      padding: 14,
+      alignItems: 'center',
+      marginBottom: 14,
+      shadowColor: '#000',
+      shadowOpacity: 0.08,
+      shadowRadius: 10,
+      elevation: 4,
+    },
+    icon: {
+      width: 36,
+      height: 36,
+      marginBottom: 6,
+    },
+    cardText: {
+      fontSize: 12,
+      fontWeight: '600',
+      textAlign: 'center',
+      color: colors.textPrimary,
+    },
+    offerCard: {
+      backgroundColor: colors.accent,
+      borderRadius: 16,
+      padding: 18,
+      marginVertical: 20,
+    },
+    offerTitle: {
+      color: '#fff',
+      fontSize: 17,
+      fontWeight: '700',
+    },
+    offerSub: {
+      color: '#e5e7eb',
+      marginTop: 6,
+      fontSize: 13,
+    },
+  });
